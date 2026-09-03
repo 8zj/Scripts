@@ -651,13 +651,13 @@ local function cast_map_vote(map_id, pos_vec)
     local target_map = map_id or "Simplicity"
     local target_pos = pos_vec or Vector3.new(0,0,0)
     remote_event:FireServer("LobbyVoting", "Vote", target_map, target_pos)
-    Logger:Log("Cast map vote: " .. target_map)
+    print("Cast map vote: " .. target_map)
 end
 
 local function lobby_ready_up()
     pcall(function()
         remote_event:FireServer("LobbyVoting", "Ready")
-        Logger:Log("Lobby ready up sent")
+        print("Lobby ready up sent")
     end)
 end
 
@@ -780,10 +780,10 @@ local function unlock_speed_tickets()
     if local_player.TimescaleTickets.Value >= 1 then
         if game.Players.LocalPlayer.PlayerGui.ReactUniversalHotbar.Frame.timescale.Lock.Visible then
             replicated_storage.RemoteFunction:InvokeServer('TicketsManager', 'UnlockTimeScale')
-            Logger:Log("Unlocked timescale tickets")
+            print("Unlocked timescale tickets")
         end
     else
-        Logger:Log("No timescale tickets left")
+        print("No timescale tickets left")
     end
 end
 
@@ -817,7 +817,7 @@ local function get_current_wave()
 end
 
 local function do_place_tower(t_name, t_pos)
-    Logger:Log("Placing tower: " .. t_name)
+    print("Placing tower: " .. t_name)
     while true do
         local ok, res = pcall(function()
             return remote_func:InvokeServer("Troops", "Pl\208\176ce", {
@@ -1046,7 +1046,7 @@ function TDS:Loadout(...)
             repeat
                 local ok = pcall(function()
                     remote:InvokeServer("Inventory", "Equip", "tower", tower_name)
-                    Logger:Log("Equipped tower: " .. tower_name)
+                    print("Equipped tower: " .. tower_name)
                     task.wait(0.3)
                 end)
                 if ok then equip_success = true else task.wait(0.2) end
@@ -1081,7 +1081,7 @@ function TDS:VoteSkip(start_wave, end_wave)
                 if vote_button and vote_button.Position == UDim2.new(0.5, 0, 0.5, 0) then
                     run_vote_skip()
                     skip_done = true
-                    Logger:Log("Voted to skip wave " .. wave)
+                    print("Voted to skip wave " .. wave)
                 else
                     if get_current_wave() > wave then
                         break 
@@ -1104,7 +1104,7 @@ function TDS:GameInfo(name, list)
 
     if marketplace_service:UserOwnsGamePassAsync(local_player.UserId, 10518590) then
         select_map_override(name, "vip")
-        Logger:Log("Selected map: " .. name)
+        print("Selected map: " .. name)
         repeat task.wait(1) until player_gui:FindFirstChild("ReactUniversalHotbar") -- waits for the game to load
         return true 
     elseif is_map_available(name) then
@@ -1112,7 +1112,7 @@ function TDS:GameInfo(name, list)
         repeat task.wait(1) until player_gui:FindFirstChild("ReactUniversalHotbar") -- waits for the game to load again
         return true
     else
-        Logger:Log("Map '" .. name .. "' not available, rejoining...") -- Logger
+        print("Map '" .. name .. "' not available, rejoining...") -- Logger
         teleport_service:Teleport(3260590327, local_player)
         repeat task.wait(9999) until false -- waits until 2050 instead of wasting timescale tickets/phantom placing/upgrading/selling towers
     end
@@ -1192,7 +1192,7 @@ function TDS:Upgrade(idx, p_id)
     local t = self.placed_towers[idx]
     if t then
         do_upgrade_tower(t, p_id or 1)
-        Logger:Log("Upgrading tower index: " .. idx)
+        print("Upgrading tower index: " .. idx)
         upgrade_history[idx] = (upgrade_history[idx] or 0) + 1
     end
 end
@@ -1210,7 +1210,7 @@ function TDS:SetTarget(idx, target_type, req_wave)
             Troop = t,
             Target = target_type
         })
-        Logger:Log("Set target for tower index " .. idx .. " to " .. target_type)
+        print("Set target for tower index " .. idx .. " to " .. target_type)
     end)
 end
 
@@ -1250,7 +1250,7 @@ end
 function TDS:Ability(idx, name, data, loop)
     local t = self.placed_towers[idx]
     if not t then return false end
-    Logger:Log("Activating ability '" .. name .. "' for tower index: " .. idx)
+    print("Activating ability '" .. name .. "' for tower index: " .. idx)
     return do_activate_ability(t, name, data, loop)
 end
 
@@ -1298,7 +1298,7 @@ end
 function TDS:SetOption(idx, name, val, req_wave)
     local t = self.placed_towers[idx]
     if t then
-        Logger:Log("Setting option '" .. name .. "' for tower index: " .. idx)
+        print("Setting option '" .. name .. "' for tower index: " .. idx)
         return do_set_option(t, name, val, req_wave)
     end
     return false
