@@ -945,7 +945,7 @@ end
 
 -- // public api
 -- lobby
-function TDS:Mode(difficulty)
+function PSH:Mode(difficulty)
     if game_state ~= "LOBBY" then 
         return false 
     end
@@ -992,7 +992,7 @@ function TDS:Mode(difficulty)
     return true
 end
 
-function TDS:Loadout(...)
+function PSH:Loadout(...)
     if game_state ~= "LOBBY" then
         return
     end
@@ -1059,7 +1059,7 @@ function TDS:Loadout(...)
 end
 
 -- ingame
-function TDS:VoteSkip(start_wave, end_wave)
+function PSH:VoteSkip(start_wave, end_wave)
     task.spawn(function()
         local current_wave = get_current_wave()
         start_wave = start_wave or (current_wave > 0 and current_wave or 1)
@@ -1093,7 +1093,7 @@ function TDS:VoteSkip(start_wave, end_wave)
     end)
 end
 
-function TDS:GameInfo(name, list)
+function PSH:GameInfo(name, list)
     list = list or {}
     if game_state ~= "GAME" then return false end
 
@@ -1118,34 +1118,34 @@ function TDS:GameInfo(name, list)
     end
 end
 
-function TDS:UnlockTimeScale()
+function PSH:UnlockTimeScale()
     unlock_speed_tickets()
 end
 
-function TDS:TimeScale(val)
+function PSH:TimeScale(val)
     set_game_timescale(val)
 end
 
-function TDS:StartGame()
+function PSH:StartGame()
     lobby_ready_up()
 end
 
-function TDS:Ready()
+function PSH:Ready()
     if game_state ~= "GAME" then
         return false 
     end
     match_ready_up()
 end
 
-function TDS:GetWave()
+function PSH:GetWave()
     return get_current_wave()
 end
 
-function TDS:RestartGame()
+function PSH:RestartGame()
     trigger_restart()
 end
 
-function TDS:Place(t_name, px, py, pz, ...)
+function PSH:Place(t_name, px, py, pz, ...)
     local args = {...}
     local stack = false
 
@@ -1188,7 +1188,7 @@ function TDS:Place(t_name, px, py, pz, ...)
     return #self.placed_towers
 end
 
-function TDS:Upgrade(idx, p_id)
+function PSH:Upgrade(idx, p_id)
     local t = self.placed_towers[idx]
     if t then
         do_upgrade_tower(t, p_id or 1)
@@ -1197,7 +1197,7 @@ function TDS:Upgrade(idx, p_id)
     end
 end
 
-function TDS:SetTarget(idx, target_type, req_wave)
+function PSH:SetTarget(idx, target_type, req_wave)
     if req_wave then
         repeat task.wait(0.5) until get_current_wave() >= req_wave
     end
@@ -1214,7 +1214,7 @@ function TDS:SetTarget(idx, target_type, req_wave)
     end)
 end
 
-function TDS:Sell(idx, req_wave)
+function PSH:Sell(idx, req_wave)
     if req_wave then
         repeat task.wait(0.5) until get_current_wave() >= req_wave
     end
@@ -1225,7 +1225,7 @@ function TDS:Sell(idx, req_wave)
     return false
 end
 
-function TDS:SellAll(req_wave)
+function PSH:SellAll(req_wave)
     task.spawn(function()
         if req_wave then
             repeat task.wait(0.5) until get_current_wave() >= req_wave
@@ -1247,14 +1247,14 @@ function TDS:SellAll(req_wave)
     end)
 end
 
-function TDS:Ability(idx, name, data, loop)
+function PSH:Ability(idx, name, data, loop)
     local t = self.placed_towers[idx]
     if not t then return false end
     print("Activating ability '" .. name .. "' for tower index: " .. idx)
     return do_activate_ability(t, name, data, loop)
 end
 
-function TDS:AutoChain(...)
+function PSH:AutoChain(...)
     local tower_indices = {...}
     if #tower_indices == 0 then return end
 
@@ -1295,7 +1295,7 @@ function TDS:AutoChain(...)
     end
 end
 
-function TDS:SetOption(idx, name, val, req_wave)
+function PSH:SetOption(idx, name, val, req_wave)
     local t = self.placed_towers[idx]
     if t then
         print("Setting option '" .. name .. "' for tower index: " .. idx)
