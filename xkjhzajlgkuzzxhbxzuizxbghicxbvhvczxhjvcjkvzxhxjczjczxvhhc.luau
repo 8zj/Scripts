@@ -16,7 +16,7 @@ local players_service = game:GetService("Players")
 local local_player = players_service.LocalPlayer or players_service.PlayerAdded:Wait()
 local mouse = local_player:GetMouse()
 local player_gui = local_player:WaitForChild("PlayerGui")
-local file_name = "ADS_Config.json"
+local file_name = "ajkdnbsakjn.json"
 
 task.spawn(function()
     local function disable_idled()
