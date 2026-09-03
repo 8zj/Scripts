@@ -150,7 +150,7 @@ local ItemNames = {
 }
 
 -- // tower management core
-TDS = {
+PSH = {
     placed_towers = {},
     active_strat = true,
     matchmaking_map = {
@@ -164,7 +164,7 @@ TDS = {
 local upgrade_history = {}
 
 -- // shared for addons
-shared.TDS_Table = TDS
+shared.PSH_Table = PSH
 
 -- // load & save
 local function save_settings()
@@ -551,7 +551,7 @@ local function handle_post_match()
     end
 
     local post_data = {
-        username = "TDS AutoStrat",
+        username = "PSH AutoStrat",
         embeds = {{
             title = (match.Status == "WIN" and "🏆 TRIUMPH" or "💀 DEFEAT"),
             color = (match.Status == "WIN" and 0x2ecc71 or 0xe74c3c),
@@ -582,7 +582,7 @@ local function handle_post_match()
                     inline = true
                 }
             },
-            footer = { text = "Logged for " .. local_player.Name .. " • TDS AutoStrat" },
+            footer = { text = "Logged for " .. local_player.Name .. " • PSH AutoStrat" },
             timestamp = DateTime.now():ToIsoDate()
         }}
     }
@@ -901,11 +901,11 @@ local function do_activate_ability(t_obj, ab_name, ab_data, is_looping)
                     end
 
                     if type(clone_idx) == "number" then
-                        data.towerToClone = TDS.placed_towers[clone_idx]
+                        data.towerToClone = PSH.placed_towers[clone_idx]
                     end
 
                     if type(target_idx) == "number" then
-                        data.towerTarget = TDS.placed_towers[target_idx]
+                        data.towerTarget = PSH.placed_towers[target_idx]
                     end
                 end
 
@@ -960,7 +960,7 @@ function PSH:Mode(difficulty)
     local res
         repeat
             local ok, result = pcall(function()
-                local mode = TDS.matchmaking_map[difficulty]
+                local mode = PSH.matchmaking_map[difficulty]
 
                 local payload
 
@@ -1264,7 +1264,7 @@ function PSH:AutoChain(...)
         local i = 1
         while running do
             local idx = tower_indices[i]
-            local tower = TDS.placed_towers[idx]
+            local tower = PSH.placed_towers[idx]
 
             if tower then
                 do_activate_ability(tower, "Call Of Arms")
@@ -1761,4 +1761,4 @@ end
 
 start_anti_afk()
 
-return TDS
+return PSH
